@@ -6,11 +6,11 @@ Dataset: pothole-detection URL:https://www.kaggle.com/datasets/andrewmvd/pothole
 Here are some example outputs from the detector:
 ![val_batch2_pred](https://github.com/user-attachments/assets/42483840-62ce-46de-9200-9dc9b15bbc9e)
 # 📊 Training Metrics
-<img width="2400" height="1200" alt="results" src="https://github.com/user-attachments/assets/260052f4-a4f9-426d-a943-9ede06c43d3f" />
-<img width="500" height="400" alt="BoxP_curve" src="https://github.com/user-attachments/assets/ae57e095-92cf-483d-98a4-9aafb577ed46" />
-<img width="500" height="400" alt="BoxR_curve" src="https://github.com/user-attachments/assets/bc8531f7-4575-436c-bfcd-c4677bc78e20" />
-<img width="500" height="400" alt="BoxPR_curve" src="https://github.com/user-attachments/assets/797b73fd-17fa-4cbc-bd9c-80085d24b9cd" />
-<img width="500" height="400" alt="BoxF1_curve" src="https://github.com/user-attachments/assets/b2c32869-61ea-4a5d-99bf-7cefb2b246f2" />
+<img width="2300" height="1200" alt="results" src="https://github.com/user-attachments/assets/260052f4-a4f9-426d-a943-9ede06c43d3f" />
+<img width="400" height="300" alt="BoxP_curve" src="https://github.com/user-attachments/assets/ae57e095-92cf-483d-98a4-9aafb577ed46" />
+<img width="400" height="300" alt="BoxR_curve" src="https://github.com/user-attachments/assets/bc8531f7-4575-436c-bfcd-c4677bc78e20" />
+<img width="400" height="300" alt="BoxPR_curve" src="https://github.com/user-attachments/assets/797b73fd-17fa-4cbc-bd9c-80085d24b9cd" />
+<img width="400" height="300" alt="BoxF1_curve" src="https://github.com/user-attachments/assets/b2c32869-61ea-4a5d-99bf-7cefb2b246f2" />
 
 ### The training curves indicate:
 

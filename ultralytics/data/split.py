@@ -102,7 +102,8 @@ def autosplit(
     annotated_only: bool = False,
 ) -> None:
     """
-    Automatically split a yolo_formatted_dataset into train/val/test splits and save the resulting splits into autosplit_*.txt files.
+    Automatically split a yolo_formatted_dataset into train/val/test splits and save the resulting splits into
+    autosplit_*.txt files.
 
     Args:
         path (Path): Path to images directory.

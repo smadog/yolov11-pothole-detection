@@ -140,7 +140,9 @@ class WorldTrainerFromScratch(WorldTrainer):
         assert data_yaml.get("train", False), "train yolo_formatted_dataset not found"  # object365.yaml
         assert data_yaml.get("val", False), "validation yolo_formatted_dataset not found"  # lvis.yaml
         data = {k: [check_det_dataset(d) for d in v.get("yolo_data", [])] for k, v in data_yaml.items()}
-        assert len(data["val"]) == 1, f"Only support validating on 1 yolo_formatted_dataset for now, but got {len(data['val'])}."
+        assert len(data["val"]) == 1, (
+            f"Only support validating on 1 yolo_formatted_dataset for now, but got {len(data['val'])}."
+        )
         val_split = "minival" if "lvis" in data["val"][0]["val"] else "val"
         for d in data["val"]:
             if d.get("minival") is None:  # for lvis yolo_formatted_dataset

@@ -1,0 +1,11 @@
+# YOLO 数据集配置文件
+path: D:\xly\project\pycharm project\yolov11\ultralytics-main\yolo_formatted_dataset
+train: train/images
+val: val/images
+
+# 类别数量
+nc: 1
+
+# 类别名称
+names:
+  0: pothole

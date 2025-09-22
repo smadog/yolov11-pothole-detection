@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 def setup_directories():
-    """设置目录路径"""
+    """设置目录路径."""
     # 源数据集路径
     source_dir = Path("dataset")
     image_source_dir = source_dir / "images"
@@ -19,7 +19,7 @@ def setup_directories():
 
 
 def get_class_names_from_annotations(annot_dir):
-    """从标注文件中自动提取所有类别名称"""
+    """从标注文件中自动提取所有类别名称."""
     class_names = set()
     xml_files = list(annot_dir.glob("*.xml"))
 
@@ -28,8 +28,8 @@ def get_class_names_from_annotations(annot_dir):
             tree = ET.parse(xml_file)
             root = tree.getroot()
 
-            for obj in root.findall('object'):
-                class_name = obj.find('name').text
+            for obj in root.findall("object"):
+                class_name = obj.find("name").text
                 class_names.add(class_name)
 
         except Exception as e:
@@ -42,21 +42,21 @@ def get_class_names_from_annotations(annot_dir):
 
 
 def convert_voc_to_yolo(xml_path, class_name_to_id):
-    """将单个VOC XML文件转换为YOLO格式"""
+    """将单个VOC XML文件转换为YOLO格式."""
     try:
         tree = ET.parse(xml_path)
         root = tree.getroot()
 
         # 获取图片尺寸
-        size = root.find('size')
-        img_width = int(size.find('width').text)
-        img_height = int(size.find('height').text)
+        size = root.find("size")
+        img_width = int(size.find("width").text)
+        img_height = int(size.find("height").text)
 
         yolo_lines = []
 
         # 遍历所有object标签
-        for obj in root.findall('object'):
-            class_name = obj.find('name').text
+        for obj in root.findall("object"):
+            class_name = obj.find("name").text
 
             if class_name not in class_name_to_id:
                 print(f"警告: 在文件 {xml_path.name} 中发现未知类别 '{class_name}'，已跳过")
@@ -65,11 +65,11 @@ def convert_voc_to_yolo(xml_path, class_name_to_id):
             class_id = class_name_to_id[class_name]
 
             # 获取边界框坐标
-            bndbox = obj.find('bndbox')
-            xmin = float(bndbox.find('xmin').text)
-            ymin = float(bndbox.find('ymin').text)
-            xmax = float(bndbox.find('xmax').text)
-            ymax = float(bndbox.find('ymax').text)
+            bndbox = obj.find("bndbox")
+            xmin = float(bndbox.find("xmin").text)
+            ymin = float(bndbox.find("ymin").text)
+            xmax = float(bndbox.find("xmax").text)
+            ymax = float(bndbox.find("ymax").text)
 
             # 计算YOLO格式的归一化坐标
             center_x = (xmin + xmax) / 2 / img_width
@@ -93,19 +93,19 @@ def convert_voc_to_yolo(xml_path, class_name_to_id):
 
 
 def ensure_directory_exists(file_path):
-    """确保文件所在的目录存在"""
+    """确保文件所在的目录存在."""
     directory = os.path.dirname(file_path)
     if directory and not os.path.exists(directory):
         os.makedirs(directory, exist_ok=True)
 
 
 def process_single_file(xml_file, image_source_dir, output_split_dir, class_name_to_id):
-    """处理单个XML文件"""
+    """处理单个XML文件."""
     stem = xml_file.stem  # 获取文件名（不含扩展名）
 
     # 查找对应的图片文件
     img_file = None
-    for ext in ['.jpg', '.jpeg', '.png', '.bmp', '.JPG', '.JPEG', '.PNG']:
+    for ext in [".jpg", ".jpeg", ".png", ".bmp", ".JPG", ".JPEG", ".PNG"]:
         potential_file = image_source_dir / (stem + ext)
         if potential_file.exists():
             img_file = potential_file
@@ -138,8 +138,8 @@ def process_single_file(xml_file, image_source_dir, output_split_dir, class_name
     # 保存YOLO格式标注
     label_dest = labels_output_dir / f"{stem}.txt"
     try:
-        with open(label_dest, 'w', encoding='utf-8') as f:
-            f.write('\n'.join(yolo_lines))
+        with open(label_dest, "w", encoding="utf-8") as f:
+            f.write("\n".join(yolo_lines))
     except Exception as e:
         print(f"写入标注文件 {label_dest} 时出错: {e}")
         return False
@@ -148,7 +148,7 @@ def process_single_file(xml_file, image_source_dir, output_split_dir, class_name
 
 
 def create_data_yaml(output_dir, class_names):
-    """创建YOLO数据集配置文件"""
+    """创建YOLO数据集配置文件."""
     yaml_content = f"""# YOLO 数据集配置文件
 path: {output_dir.absolute()}
 train: train/images
@@ -168,14 +168,14 @@ names:
     # 确保目录存在
     yaml_file.parent.mkdir(parents=True, exist_ok=True)
 
-    with open(yaml_file, 'w', encoding='utf-8') as f:
+    with open(yaml_file, "w", encoding="utf-8") as f:
         f.write(yaml_content)
 
     print(f"配置文件已创建: {yaml_file}")
 
 
 def main():
-    """主函数"""
+    """主函数."""
     print("开始准备YOLO格式数据集...")
 
     # 设置目录
@@ -252,4 +252,4 @@ def main():
     # 创建data.yaml配置文件
     create_data_yaml(output_dir, class_names)
 
-    print(f"\n处理完成!")
+    print("\n处理完成!")

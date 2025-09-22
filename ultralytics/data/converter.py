@@ -585,8 +585,8 @@ def merge_multi_segment(segments: list[list]):
 
 def yolo_bbox2segment(im_dir: str | Path, save_dir: str | Path | None = None, sam_model: str = "sam_b.pt", device=None):
     """
-    Convert existing object detection yolo_formatted_dataset (bounding boxes) to segmentation yolo_formatted_dataset or oriented bounding box (OBB) in
-    YOLO format. Generate segmentation data using SAM auto-annotator as needed.
+    Convert existing object detection yolo_formatted_dataset (bounding boxes) to segmentation yolo_formatted_dataset or
+    oriented bounding box (OBB) in YOLO format. Generate segmentation data using SAM auto-annotator as needed.
 
     Args:
         im_dir (str | Path): Path to image directory to convert.
@@ -667,7 +667,9 @@ def create_synthetic_coco_dataset():
     """
 
     def create_synthetic_image(image_file: Path):
-        """Generate synthetic images with random sizes and colors for yolo_formatted_dataset augmentation or testing purposes."""
+        """Generate synthetic images with random sizes and colors for yolo_formatted_dataset augmentation or testing
+        purposes.
+        """
         if not image_file.exists():
             size = (random.randint(480, 640), random.randint(480, 640))
             Image.new(

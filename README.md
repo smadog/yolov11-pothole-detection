@@ -1,6 +1,8 @@
 # 🎯 Road Pothole Detection 
 A test of using the yolo11m model to detect road potholes in 100 epochs.  
+
 Model: yolo11m.pt  
+
 Dataset: pothole-detection URL:https://www.kaggle.com/datasets/andrewmvd/pothole-detection
 # 📸 Examples
 Here are some example outputs from the detector:
@@ -15,5 +17,7 @@ Here are some example outputs from the detector:
 ### The training curves indicate:
 
 📉 Losses (box, cls, DFL) consistently decrease across training and validation.  
+
 ✅ Precision and recall stabilize around ~0.70 after 80 epochs, but exhibit a fluctuation in the later stages of training.  
-📈 The model achieved a final precision of 0.743, recall of 0.732, mAP50 of 0.806 and mAP50-95 of 0.537，indicating the model has acquired a preliminary  capability for pothole identification.Despite the model's unstable performance due to the limited training epochs, there is still significant room for improvement in pothole recognition. However, as a first attempt, the results are acceptable.
+
+📈 The model achieved a final precision of 0.743, recall of 0.732, mAP50 of 0.806 and mAP50-95 of 0.537，indicating the model has acquired a preliminary  capability for pothole detection.  Despite the model's unstable performance due to the limited training epochs, there is still significant room for improvement in pothole recognition. However, as a first attempt, the result is acceptable.

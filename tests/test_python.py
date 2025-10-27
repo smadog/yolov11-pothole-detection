@@ -278,7 +278,7 @@ def test_predict_callback_and_setup():
     model.add_callback("on_predict_batch_end", on_predict_batch_end)
 
     dataset = load_inference_source(source=SOURCE)
-    bs = dataset.bs  # noqa access predictor properties
+    bs = dataset.bs
     results = model.predict(dataset, stream=True, imgsz=160)  # source already setup
     for r, im0, bs in results:
         print("test_callback", im0.shape)
@@ -333,7 +333,9 @@ def test_labels_and_crops():
 
 @pytest.mark.skipif(not ONLINE, reason="environment is offline")
 def test_data_utils():
-    """Test utility functions in ultralytics/data/utils.py, including yolo_formatted_dataset stats and auto-splitting."""
+    """Test utility functions in ultralytics/data/utils.py, including yolo_formatted_dataset stats and auto-
+    splitting.
+    """
     from ultralytics.data.split import autosplit
     from ultralytics.data.utils import HUBDatasetStats
     from ultralytics.utils.downloads import zip_directory

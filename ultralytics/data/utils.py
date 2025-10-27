@@ -436,7 +436,9 @@ def check_det_dataset(dataset: str, autodownload: bool = True) -> dict[str, Any]
     data["channels"] = data.get("channels", 3)  # get image channels, default to 3
 
     # Resolve paths
-    path = Path(extract_dir or data.get("path") or Path(data.get("yaml_file", "")).parent)  # yolo_formatted_dataset root
+    path = Path(
+        extract_dir or data.get("path") or Path(data.get("yaml_file", "")).parent
+    )  # yolo_formatted_dataset root
     if not path.exists() and not path.is_absolute():
         path = (DATASETS_DIR / path).resolve()  # path relative to DATASETS_DIR
 
@@ -459,7 +461,7 @@ def check_det_dataset(dataset: str, autodownload: bool = True) -> dict[str, Any]
         if not all(x.exists() for x in val):
             name = clean_url(dataset)  # yolo_formatted_dataset name with URL auth stripped
             LOGGER.info("")
-            m = f"Dataset '{name}' images not found, missing path '{[x for x in val if not x.exists()][0]}'"
+            m = f"Dataset '{name}' images not found, missing path '{next(x for x in val if not x.exists())}'"
             if s and autodownload:
                 LOGGER.warning(m)
             else:
@@ -742,7 +744,7 @@ class HUBDatasetStats:
         return self.im_dir
 
 
-def compress_one_image(f: str, f_new: str = None, max_dim: int = 1920, quality: int = 50):
+def compress_one_image(f: str, f_new: str | None = None, max_dim: int = 1920, quality: int = 50):
     """
     Compress a single image file to reduced size while preserving its aspect ratio and quality using either the Python
     Imaging Library (PIL) or OpenCV library. If the input image is smaller than the maximum dimension, it will not be

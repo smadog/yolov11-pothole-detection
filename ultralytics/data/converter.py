@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import asyncio
+import functools
 import json
+import operator
 import random
 import shutil
 from collections import defaultdict
@@ -308,7 +310,7 @@ def convert_coco(
                     continue
 
                 cls = coco80[ann["category_id"] - 1] if cls91to80 else ann["category_id"] - 1  # class
-                box = [cls] + box.tolist()
+                box = [cls, *box.tolist()]
                 if box not in bboxes:
                     bboxes.append(box)
                     if use_segments and ann.get("segmentation") is not None:
@@ -321,7 +323,7 @@ def convert_coco(
                         else:
                             s = [j for i in ann["segmentation"] for j in i]  # all segments concatenated
                             s = (np.array(s).reshape(-1, 2) / np.array([w, h])).reshape(-1).tolist()
-                        s = [cls] + s
+                        s = [cls, *s]
                         segments.append(s)
                     if use_keypoints and ann.get("keypoints") is not None:
                         keypoints.append(
@@ -585,8 +587,8 @@ def merge_multi_segment(segments: list[list]):
 
 def yolo_bbox2segment(im_dir: str | Path, save_dir: str | Path | None = None, sam_model: str = "sam_b.pt", device=None):
     """
-    Convert existing object detection yolo_formatted_dataset (bounding boxes) to segmentation yolo_formatted_dataset or oriented bounding box (OBB) in
-    YOLO format. Generate segmentation data using SAM auto-annotator as needed.
+    Convert existing object detection yolo_formatted_dataset (bounding boxes) to segmentation yolo_formatted_dataset or
+    oriented bounding box (OBB) in YOLO format. Generate segmentation data using SAM auto-annotator as needed.
 
     Args:
         im_dir (str | Path): Path to image directory to convert.
@@ -667,7 +669,9 @@ def create_synthetic_coco_dataset():
     """
 
     def create_synthetic_image(image_file: Path):
-        """Generate synthetic images with random sizes and colors for yolo_formatted_dataset augmentation or testing purposes."""
+        """Generate synthetic images with random sizes and colors for yolo_formatted_dataset augmentation or testing
+        purposes.
+        """
         if not image_file.exists():
             size = (random.randint(480, 640), random.randint(480, 640))
             Image.new(
@@ -732,7 +736,9 @@ def convert_to_multispectral(path: str | Path, n_channels: int = 10, replace: bo
     path = Path(path)
     if path.is_dir():
         # Process directory
-        im_files = sum((list(path.rglob(f"*.{ext}")) for ext in (IMG_FORMATS - {"tif", "tiff"})), [])
+        im_files = functools.reduce(
+            operator.iadd, (list(path.rglob(f"*.{ext}")) for ext in (IMG_FORMATS - {"tif", "tiff"})), []
+        )
         for im_path in im_files:
             try:
                 convert_to_multispectral(im_path, n_channels)

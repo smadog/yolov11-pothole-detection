@@ -181,7 +181,9 @@ class BaseDataset(Dataset):
         except Exception as e:
             raise FileNotFoundError(f"{self.prefix}Error loading data from {img_path}\n{HELP_URL}") from e
         if self.fraction < 1:
-            im_files = im_files[: round(len(im_files) * self.fraction)]  # retain a fraction of the yolo_formatted_dataset
+            im_files = im_files[
+                : round(len(im_files) * self.fraction)
+            ]  # retain a fraction of the yolo_formatted_dataset
         check_file_speeds(im_files, prefix=self.prefix)  # check image read speeds
         return im_files
 
@@ -310,7 +312,7 @@ class BaseDataset(Dataset):
                 LOGGER.warning(f"{self.prefix}Skipping caching images to disk, directory not writeable")
                 return False
         disk_required = b * self.ni / n * (1 + safety_margin)  # bytes required to cache yolo_formatted_dataset to disk
-        total, used, free = shutil.disk_usage(Path(self.im_files[0]).parent)
+        total, _used, free = shutil.disk_usage(Path(self.im_files[0]).parent)
         if disk_required > free:
             self.cache = None
             LOGGER.warning(

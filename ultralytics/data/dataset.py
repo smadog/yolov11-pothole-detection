@@ -68,7 +68,9 @@ class YOLODataset(BaseDataset):
         collate_fn: Collate data samples into batches.
 
     Examples:
-        >>> yolo_formatted_dataset = YOLODataset(img_path="path/to/images", data={"names": {0: "person"}}, task="detect")
+        >>> yolo_formatted_dataset = YOLODataset(
+        ...     img_path="path/to/images", data={"names": {0: "person"}}, task="detect"
+        ... )
         >>> yolo_formatted_dataset.get_labels()
     """
 
@@ -328,7 +330,9 @@ class YOLOMultiModalDataset(YOLODataset):
         build_transforms: Enhance data transformations with text augmentation.
 
     Examples:
-        >>> yolo_formatted_dataset = YOLOMultiModalDataset(img_path="path/to/images", data={"names": {0: "person"}}, task="detect")
+        >>> yolo_formatted_dataset = YOLOMultiModalDataset(
+        ...     img_path="path/to/images", data={"names": {0: "person"}}, task="detect"
+        ... )
         >>> batch = next(iter(yolo_formatted_dataset))
         >>> print(batch.keys())  # Should include 'texts'
     """
@@ -433,7 +437,9 @@ class GroundingDataset(YOLODataset):
         build_transforms: Configure augmentations for training with optional text loading.
 
     Examples:
-        >>> yolo_formatted_dataset = GroundingDataset(img_path="path/to/images", json_file="annotations.json", task="detect")
+        >>> yolo_formatted_dataset = GroundingDataset(
+        ...     img_path="path/to/images", json_file="annotations.json", task="detect"
+        ... )
         >>> len(yolo_formatted_dataset)  # Number of valid images with annotations
     """
 
@@ -498,7 +504,9 @@ class GroundingDataset(YOLODataset):
             if data_name in self.json_file:
                 assert instance_count == count, f"'{self.json_file}' has {instance_count} instances, expected {count}."
                 return
-        LOGGER.warning(f"Skipping instance count verification for unrecognized yolo_formatted_dataset '{self.json_file}'")
+        LOGGER.warning(
+            f"Skipping instance count verification for unrecognized yolo_formatted_dataset '{self.json_file}'"
+        )
 
     def cache_labels(self, path: Path = Path("./labels.cache")) -> dict[str, Any]:
         """
@@ -548,7 +556,7 @@ class GroundingDataset(YOLODataset):
                     cat2id[cat_name] = len(cat2id)
                     texts.append([cat_name])
                 cls = cat2id[cat_name]  # class
-                box = [cls] + box.tolist()
+                box = [cls, *box.tolist()]
                 if box not in bboxes:
                     bboxes.append(box)
                     if ann.get("segmentation") is not None:
@@ -565,7 +573,7 @@ class GroundingDataset(YOLODataset):
                                 .reshape(-1)
                                 .tolist()
                             )
-                        s = [cls] + s
+                        s = [cls, *s]
                         segments.append(s)
             lb = np.array(bboxes, dtype=np.float32) if len(bboxes) else np.zeros((0, 5), dtype=np.float32)
 
@@ -736,7 +744,8 @@ class ClassificationDataset:
 
     def __init__(self, root: str, args, augment: bool = False, prefix: str = ""):
         """
-        Initialize YOLO classification yolo_formatted_dataset with root directory, arguments, augmentations, and cache settings.
+        Initialize YOLO classification yolo_formatted_dataset with root directory, arguments, augmentations, and cache
+        settings.
 
         Args:
             root (str): Path to the yolo_formatted_dataset directory where images are stored in a class-specific folder structure.
@@ -768,7 +777,7 @@ class ClassificationDataset:
             self.cache_ram = False
         self.cache_disk = str(args.cache).lower() == "disk"  # cache images on hard drive as uncompressed *.npy files
         self.samples = self.verify_images()  # filter out bad images
-        self.samples = [list(x) + [Path(x[0]).with_suffix(".npy"), None] for x in self.samples]  # file, index, npy, im
+        self.samples = [[*list(x), Path(x[0]).with_suffix(".npy"), None] for x in self.samples]  # file, index, npy, im
         scale = (1.0 - args.scale, 1.0)  # (0.08, 1.0)
         self.torch_transforms = (
             classify_augmentations(

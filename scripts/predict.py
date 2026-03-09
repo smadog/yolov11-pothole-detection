@@ -1,14 +1,15 @@
-from ultralytics import YOLO
+import os
+
 import cv2
 import matplotlib.pyplot as plt
-import numpy as np
-import os
-os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
+from ultralytics import YOLO
+
+os.environ["KMP_DUPLICATE_LIB_OK"] = "True"
 
 
 def plot_detection_results(image, results):
-    """使用 matplotlib 显示检测结果"""
+    """使用 matplotlib 显示检测结果."""
     # 转换 BGR 到 RGB
     image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
@@ -33,24 +34,29 @@ def plot_detection_results(image, results):
                 confidence = float(conf)
 
                 # 绘制矩形框
-                rect = plt.Rectangle((x1, y1), x2 - x1, y2 - y1,
-                                     fill=False, edgecolor='red', linewidth=2)
+                rect = plt.Rectangle((x1, y1), x2 - x1, y2 - y1, fill=False, edgecolor="red", linewidth=2)
                 plt.gca().add_patch(rect)
 
                 # 添加标签
-                plt.text(x1, y1 - 10, f'{class_name}: {confidence:.2f}',
-                         bbox=dict(facecolor='red', alpha=0.5),
-                         fontsize=10, color='white')
+                plt.text(
+                    x1,
+                    y1 - 10,
+                    f"{class_name}: {confidence:.2f}",
+                    bbox=dict(facecolor="red", alpha=0.5),
+                    fontsize=10,
+                    color="white",
+                )
 
-            plt.axis('off')
-            plt.title(f'检测结果 - 共检测到 {len(boxes)} 个目标', fontsize=14)
+            plt.axis("off")
+            plt.title(f"检测结果 - 共检测到 {len(boxes)} 个目标", fontsize=14)
 
     return plt
 
 
 # 加载模型和图像
 model = YOLO(
-    r"D:\xly\project\pycharm project\yolov11\ultralytics-main\runs\detect\pothole_detection_v2\weights\best.pt")
+    r"D:\xly\project\pycharm project\yolov11\ultralytics-main\runs\detect\pothole_detection_v2\weights\best.pt"
+)
 image_path = r"D:\xly\project\pycharm project\yolov11\ultralytics-main\yolo_formatted_dataset\val\images\potholes45.png"
 
 # 进行预测
